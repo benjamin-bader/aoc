@@ -1,0 +1,12 @@
+[versions]
+coroutines = "1.10.2"
+junit = "6.0.1"
+kotlin = "2.2.0"
+
+[libraries]
+junit-platformLauncher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

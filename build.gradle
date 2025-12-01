@@ -1,0 +1,23 @@
+import com.bendb.aoc.buildlogic.NewYearTask
+
+import java.time.LocalDate
+
+plugins {
+    alias libs.plugins.kotlin apply false
+    id 'aoc' apply false
+}
+
+group = GROUP
+version = VERSION_NAME
+
+wrapper {
+    gradleVersion = "9.2.1"
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+tasks.register("newYear", NewYearTask) {
+    group = 'build setup'
+    description = 'Sets up a new year module for Advent of Code'
+
+    year = LocalDate.now().year
+}

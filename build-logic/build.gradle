@@ -1,0 +1,15 @@
+plugins {
+    id 'java-gradle-plugin'
+    alias libs.plugins.kotlin
+}
+
+gradlePlugin {
+    plugins {
+        aoc {
+            id = 'aoc'
+            displayName = 'Advent of Code Utilities'
+            description = 'Utilities for Advent of Code projects'
+            implementationClass = 'com.bendb.aoc.buildlogic.AocPlugin'
+        }
+    }
+}
