@@ -50,8 +50,13 @@ abstract class NewDayTask @Inject constructor(
             package $packageName
 
             object Day$dayStr {
-              fun partOne(): Unit = TODO()
-              fun partTwo(): Unit = TODO()
+              fun partOne(input: String): String {
+                TODO()
+              }
+
+              fun partTwo(input: String): String {
+                TODO()
+              }
             }
         """.trimIndent()
 
@@ -62,14 +67,20 @@ abstract class NewDayTask @Inject constructor(
             import kotlin.test.assertEquals
 
             class Day${dayStr}Test {
+                val sampleInput: String
+                  get() = ""
+            
+                val testInput: String
+                  get() = javaClass.classLoader.getResource("day$dayStr/input.txt")!!.readText()
+            
                 @Test
                 fun testPartOne() {
-                    assertEquals(Unit, Day$dayStr.partOne())
+                    assertEquals("", Day$dayStr.partOne(sampleInput))
                 }
                 
                 @Test
                 fun testPartTwo() {
-                    assertEquals(Unit, Day$dayStr.partTwo())
+                    assertEquals("", Day$dayStr.partTwo(sampleInput))
                 }
             }
         """.trimIndent()

@@ -6,6 +6,11 @@ import kotlin.test.assertEquals
 class Day01Test {
     @Test
     fun testPartOne() {
-        assertEquals(Unit, Day01.partOne())
+        assertEquals(1084, Day01.partOne())
+    }
+
+    @Test
+    fun testPartTwo() {
+        assertEquals(6475, Day01.partTwo())
     }
 }
