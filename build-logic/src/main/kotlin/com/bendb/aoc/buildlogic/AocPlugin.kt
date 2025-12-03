@@ -4,6 +4,9 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.jvm.JvmTestSuite
+import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.bundling.Zip
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.testing.base.TestingExtension
@@ -52,6 +55,53 @@ class AocPlugin : Plugin<Project> {
         target.tasks.register("newDay", NewDayTask::class.java) { task ->
             task.group = "aoc"
             task.description = "Creates a new DayXX.kt file for the next day."
+        }
+
+        val gpgPath = target.providers.exec {
+            it.commandLine("which", "gpg")
+        }.standardOutput.asText.map { it.trim() }
+
+        val sourceSets = target.extensions.getByType(SourceSetContainer::class.java)
+        val mainSourceSet = sourceSets.named("main")
+        val resources = mainSourceSet.map { it.resources }
+
+        val encryptedInputsFile = target.layout.projectDirectory.file("inputs.zip.gpg")
+        val passphraseProvider = target.providers.environmentVariable("AOC_INPUT_PASSPHRASE")
+            .orElse(target.providers.gradleProperty("aoc_input_passphrase"))
+
+        val packageResources = target.tasks.register("packageResources", Zip::class.java) { t ->
+            t.archiveBaseName.set("inputs")
+            t.archiveVersion.set("")
+            t.destinationDirectory.set(target.layout.buildDirectory.dir("inputs"))
+            t.from(resources)
+        }
+
+        val encryptResources = target.tasks.register("encryptResources", EncryptFileTask::class.java) { t ->
+            t.executable = gpgPath.get()
+
+            t.inputFile.set(packageResources.flatMap { it.archiveFile })
+            t.outputFile.set(encryptedInputsFile)
+            t.passphrase.set(passphraseProvider)
+        }
+
+        val decryptResources = target.tasks.register("decryptResources", DecryptFileTask::class.java) { t ->
+            t.executable = gpgPath.get()
+
+            t.inputFile.set(encryptedInputsFile)
+            t.outputFile.set(target.layout.buildDirectory.dir("restored-inputs").map { it.file("inputs.zip") })
+            t.passphrase.set(passphraseProvider)
+        }
+
+        val restoreResources = target.tasks.register("restoreResources", Copy::class.java) { t ->
+            t.onlyIf {
+                encryptedInputsFile.asFile.exists()
+            }
+
+            val zipFile = decryptResources.flatMap { it.outputFile }
+
+            t.from(target.zipTree(zipFile))
+
+            t.into(resources.map { it.srcDirs.first() })
         }
     }
 }
