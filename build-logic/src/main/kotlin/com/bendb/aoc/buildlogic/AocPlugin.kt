@@ -72,6 +72,7 @@ class AocPlugin : Plugin<Project> {
         val encryptedInputsFile = target.layout.projectDirectory.file("inputs.zip.gpg")
         val passphraseProvider = target.providers.environmentVariable("AOC_INPUT_PASSPHRASE")
             .orElse(target.providers.gradleProperty("aoc_input_passphrase"))
+            .map { it.trim() }
 
         val packageResources = target.tasks.register<Zip>("packageResources") { t ->
             t.archiveBaseName.set("inputs")
