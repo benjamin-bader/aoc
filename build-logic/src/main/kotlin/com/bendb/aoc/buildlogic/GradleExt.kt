@@ -7,7 +7,7 @@ import org.gradle.api.tasks.TaskContainer
 import org.gradle.api.tasks.TaskProvider
 
 inline fun <reified T : Task> TaskContainer.register(name: String, action: Action<T>): TaskProvider<T> {
-    return this.register(name, T::class.java)
+    return this.register(name, T::class.java, action)
 }
 
 inline fun <reified T : Any> ExtensionContainer.getByType(): T {

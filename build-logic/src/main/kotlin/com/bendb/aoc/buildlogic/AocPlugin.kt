@@ -101,7 +101,8 @@ class AocPlugin : Plugin<Project> {
         val restoreResources = target.tasks.register<Copy>("restoreResources") { t ->
             val zipFile = decryptResources.flatMap { it.outputFile }
 
-            t.dependsOn(decryptResources)
+            t.group = "aoc"
+            t.description = "Restores the encrypted input resources into the resources directory."
 
             t.from(target.zipTree(zipFile))
 
