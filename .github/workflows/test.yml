@@ -25,12 +25,15 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
 
+      - name: Set up gradle properties
+        run: |
+          echo -n "aoc_input_passphrase=" >> ~/.gradle/gradle.properties
+          echo "${{ secrets.AOC_INPUT_PASSHPRASE }}" >> ~/.gradle/gradle.properties
+
       - name: Unpack inputs
         run: |
             tree --du -h year2025
             ./gradlew --scan :year2025:restoreResources
-        env:
-          AOC_INPUT_PASSPHRASE: ${{secrets.AOC_INPUT_PASSHPRASE}}
 
       - name: Build and Test
         run: ./gradlew :year2025:check
