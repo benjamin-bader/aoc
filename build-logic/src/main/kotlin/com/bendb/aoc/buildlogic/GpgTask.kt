@@ -37,7 +37,7 @@ abstract class GpgTask : Exec() {
         private val command: Property<Command>,
     ) : CommandLineArgumentProvider {
     override fun asArguments(): Iterable<String> {
-      return listOf(command.get().flag, "--batch", "--yes", "--cipher-algo", "AES256")
+      return listOf(command.get().flag, "--batch", "--yes", "--pinentry-mode", "loopback", "--cipher-algo", "AES256")
     }
   }
 
@@ -45,7 +45,7 @@ abstract class GpgTask : Exec() {
     private val passphrase: Property<String>,
   ) : CommandLineArgumentProvider {
     override fun asArguments(): Iterable<String> {
-      return listOf("--passphrase", "'" + passphrase.get() + "'")
+      return listOf("--passphrase", passphrase.get())
     }
   }
 
