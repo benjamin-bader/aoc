@@ -21,3 +21,10 @@ tasks.register("newYear", NewYearTask) {
 
     year = LocalDate.now().year
 }
+
+if (hasProperty('buildScan')) {
+    buildScan {
+        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+        termsOfServiceAgree = 'yes'
+    }
+}
