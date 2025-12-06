@@ -29,9 +29,8 @@ jobs:
 
       - name: Figure out gpg maybe
         run: |
-          gpg --version
           sudo apt update
-          sudo apt -y upgrade
+          sudo apt -y upgrade gpg
           gpg --version
 
       - name: Unpack inputs
@@ -40,4 +39,4 @@ jobs:
           AOC_INPUT_PASSPHRASE: ${{secrets.AOC_INPUT_PASSHPRASE}}
 
       - name: Build and Test
-        run: ./gradlew :2025:check
+        run: ./gradlew :year2025:check
