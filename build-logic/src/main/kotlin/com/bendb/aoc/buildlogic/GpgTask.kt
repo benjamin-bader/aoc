@@ -1,6 +1,5 @@
 package com.bendb.aoc.buildlogic
 
-import java.io.ByteArrayOutputStream
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Exec
@@ -9,9 +8,17 @@ import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.process.CommandLineArgumentProvider
 
-abstract class EncryptFileTask : Exec() {
+abstract class GpgTask : Exec() {
+    enum class Command(val flag: String) {
+      ENCRYPT("--symmetric"),
+      DECRYPT("--decrypt"),
+    }
+
   @get:InputFile
   abstract val inputFile: RegularFileProperty
+
+  @get:Input
+  abstract val command: Property<Command>
 
   @get:Input
   abstract val passphrase: Property<String>
@@ -19,22 +26,18 @@ abstract class EncryptFileTask : Exec() {
   @get:OutputFile
   abstract val outputFile: RegularFileProperty
 
-  private val stdout = ByteArrayOutputStream()
-
   init {
-    argumentProviders.add(StaticArgumentsProvider())
+    argumentProviders.add(StaticArgumentsProvider(command))
     argumentProviders.add(PassphraseArgumentProvider(passphrase))
     argumentProviders.add(OutputFileArgumentProvider(outputFile))
     argumentProviders.add(InputFileArgumentProvider(inputFile))
-
-    standardOutput = stdout
-
-    doLast { println("GPG SAID: ${stdout.toString(Charsets.UTF_8)}") }
   }
 
-  class StaticArgumentsProvider : CommandLineArgumentProvider {
+    class StaticArgumentsProvider(
+        private val command: Property<Command>,
+    ) : CommandLineArgumentProvider {
     override fun asArguments(): Iterable<String> {
-      return listOf("--symmetric", "--batch", "--yes", "--cipher-algo", "AES256")
+      return listOf(command.get().flag, "--batch", "--yes", "--cipher-algo", "AES256")
     }
   }
 

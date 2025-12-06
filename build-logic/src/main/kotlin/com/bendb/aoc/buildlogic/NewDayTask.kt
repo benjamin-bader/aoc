@@ -33,6 +33,7 @@ abstract class NewDayTask @Inject constructor(
     @TaskAction
     fun doThatThang() {
         val srcDir = project.layout.projectDirectory.dir("src/main/kotlin")
+        val resourcesDir = project.layout.projectDirectory.dir("src/main/resources")
         val testDir = project.layout.projectDirectory.dir("src/test/kotlin")
 
         val existingDays = srcDir.asFileTree.matching {
@@ -60,6 +61,7 @@ abstract class NewDayTask @Inject constructor(
             }
         """.trimIndent()
 
+        val quotes = "\"\"\""
         val testContent = """
             package $packageName
 
@@ -68,7 +70,9 @@ abstract class NewDayTask @Inject constructor(
 
             class Day${dayStr}Test {
                 val sampleInput: String
-                  get() = ""
+                  get() = $quotes
+                        |
+                    $quotes.trimMargin()
             
                 val testInput: String
                   get() = javaClass.classLoader.getResource("day$dayStr/input.txt")!!.readText()
@@ -87,12 +91,15 @@ abstract class NewDayTask @Inject constructor(
 
         val packagePath = packageName.replace('.', File.separatorChar)
         val sourceFile = srcDir.dir(packagePath).file("Day$dayStr.kt").asFile
+        val resourceFile = resourcesDir.dir("day$dayStr").file("input.txt").asFile
         val testFile = testDir.dir(packagePath).file("Day${dayStr}Test.kt").asFile
 
         sourceFile.parentFile.mkdirs()
+        resourceFile.parentFile.mkdirs()
         testFile.parentFile.mkdirs()
 
         sourceFile.writeText(classContent)
+        resourceFile.createNewFile()
         testFile.writeText(testContent)
     }
 }

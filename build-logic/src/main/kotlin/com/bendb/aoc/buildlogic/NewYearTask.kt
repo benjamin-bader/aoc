@@ -14,8 +14,8 @@ abstract class NewYearTask : DefaultTask() {
 
     @TaskAction
     fun setUpProject() {
-        val year = LocalDateTime.now().year.toString()
-        val projectDir = project.layout.projectDirectory.dir(year)
+        val slug = "year${year.get()}"
+        val projectDir = project.layout.projectDirectory.dir(slug)
         val buildFile = projectDir.file("build.gradle")
         val propsFile = projectDir.file("gradle.properties")
 
@@ -32,7 +32,7 @@ abstract class NewYearTask : DefaultTask() {
         """.trimMargin())
 
         propsFile.asFile.writeText("""
-            |GROUP=com.bendb.aoc.year$year
+            |GROUP=com.bendb.aoc.$slug
             |
         """.trimMargin())
     }

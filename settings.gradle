@@ -18,8 +18,10 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview('TYPESAFE_PROJECT_ACCESSORS')
+
 includeBuild 'build-logic'
 
 rootProject.name = 'aoc'
 
-include ':2025'
+include ':year2025'
