@@ -28,7 +28,7 @@ jobs:
       - name: Unpack inputs
         run: |
             tree --du -h year2025
-            ./gradlew :year2025:restoreResources
+            ./gradlew --scan :year2025:restoreResources
         env:
           AOC_INPUT_PASSPHRASE: ${{secrets.AOC_INPUT_PASSHPRASE}}
 
