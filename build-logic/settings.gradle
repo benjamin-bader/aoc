@@ -19,3 +19,5 @@ dependencyResolutionManagement {
         gradlePluginPortal()
     }
 }
+
+rootProject.name = 'build-logic'

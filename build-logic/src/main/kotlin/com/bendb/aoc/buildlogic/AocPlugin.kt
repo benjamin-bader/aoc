@@ -101,6 +101,8 @@ class AocPlugin : Plugin<Project> {
         val restoreResources = target.tasks.register<Copy>("restoreResources") { t ->
             val zipFile = decryptResources.flatMap { it.outputFile }
 
+            t.dependsOn(decryptResources)
+
             t.from(target.zipTree(zipFile))
 
             t.into(resources.map { it.srcDirs.first() })
