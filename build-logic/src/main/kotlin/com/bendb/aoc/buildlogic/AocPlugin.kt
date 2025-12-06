@@ -99,10 +99,6 @@ class AocPlugin : Plugin<Project> {
         }
 
         val restoreResources = target.tasks.register<Copy>("restoreResources") { t ->
-            t.onlyIf {
-                encryptedInputsFile.asFile.exists()
-            }
-
             val zipFile = decryptResources.flatMap { it.outputFile }
 
             t.from(target.zipTree(zipFile))
