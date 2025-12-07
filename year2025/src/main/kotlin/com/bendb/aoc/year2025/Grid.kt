@@ -4,7 +4,7 @@ class Grid(val grid: List<CharArray>) {
   val height = grid.size
   val width = grid[0].size
 
-  constructor(text: String) : this(text.trim().lines().map { it.toCharArray() })
+  constructor(text: String) : this(text.lines().map { it.toCharArray() })
 
   val points: Sequence<Point>
     get() = sequence {
@@ -14,6 +14,21 @@ class Grid(val grid: List<CharArray>) {
         }
       }
     }
+
+  /**
+   * Returns the columns of the grid as sequences of character lists, from top to bottom.
+   */
+  val columns: Sequence<List<Char>>
+    get() = sequence {
+      for (x in 0 until width) {
+        val column = mutableListOf<Char>()
+        for (y in 0 until height) {
+          column.add(grid[y][x])
+        }
+        yield(column)
+      }
+    }
+
 
   operator fun get(x: Int, y: Int): Char {
     return grid[y][x]
