@@ -15,6 +15,17 @@ class Grid(val grid: List<CharArray>) {
       }
     }
 
+  val rows: Sequence<List<Char>>
+    get() = sequence {
+      for (y in 0 until height) {
+        val row = mutableListOf<Char>()
+        for (x in 0 until width) {
+          row.add(grid[y][x])
+        }
+        yield(row)
+      }
+    }
+
   /**
    * Returns the columns of the grid as sequences of character lists, from top to bottom.
    */
