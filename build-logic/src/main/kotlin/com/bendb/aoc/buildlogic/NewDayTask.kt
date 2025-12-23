@@ -51,11 +51,11 @@ abstract class NewDayTask @Inject constructor(
             package $packageName
 
             object Day$dayStr {
-              fun partOne(input: String): String {
+              fun partOne(input: String): Long {
                 TODO()
               }
 
-              fun partTwo(input: String): String {
+              fun partTwo(input: String): Long {
                 TODO()
               }
             }
@@ -73,18 +73,18 @@ abstract class NewDayTask @Inject constructor(
                   get() = $quotes
                         |
                     $quotes.trimMargin()
-            
+
                 val testInput: String
                   get() = javaClass.classLoader.getResource("day$dayStr/input.txt")!!.readText()
-            
+
                 @Test
                 fun testPartOne() {
-                    assertEquals("", Day$dayStr.partOne(sampleInput))
+                    assertEquals(-1, Day$dayStr.partOne(sampleInput))
                 }
-                
+
                 @Test
                 fun testPartTwo() {
-                    assertEquals("", Day$dayStr.partTwo(sampleInput))
+                    assertEquals(-1, Day$dayStr.partTwo(sampleInput))
                 }
             }
         """.trimIndent()
